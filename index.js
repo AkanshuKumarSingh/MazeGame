@@ -1,6 +1,6 @@
-const { Engine, Render, Runner, World, Bodies } = Matter;
+const { Engine, Render, Runner, World, Bodies, Body } = Matter;
 
-const cells = 3;
+const cells = 7;
 const height = 600;
 const width = 600;
 const unitLength = width / cells;
@@ -22,16 +22,16 @@ Runner.run(Runner.create(), engine);
 //wall
 
 const walls = [
-    Bodies.rectangle(width / 2, 0, width, 40, {
+    Bodies.rectangle(width / 2, 0, width, 2, {
         isStatic: true
     }),
-    Bodies.rectangle(width / 2, height, width, 40, {
+    Bodies.rectangle(width / 2, height, width, 2, {
         isStatic: true
     }),
-    Bodies.rectangle(0, height / 2, 40, height, {
+    Bodies.rectangle(0, height / 2, 2, height, {
         isStatic: true
     }),
-    Bodies.rectangle(width, height / 2, 40, height, {
+    Bodies.rectangle(width, height / 2, 2, height, {
         isStatic: true
     })
 ]
@@ -156,5 +156,36 @@ verticals.forEach((row,rowIndex) => {
     })
 })
 
+//goal
+const goal = Bodies.rectangle(
+    width-unitLength/2,
+    height-unitLength/2,
+    unitLength*0.7,
+    unitLength*0.7,
+    {
+        isStatic:true
+    }
+)
+World.add(world,goal);
 
 
+//ball
+const ball = Bodies.circle(
+    unitLength/2,
+    unitLength/2,
+    unitLength/4
+)
+
+World.add(world,ball);
+
+document.addEventListener('keydown',event=>{
+    if (event.keyCode === 87) {
+        console.log('move ball up');
+    }else if (event.keyCode === 68) {
+        console.log('move ball right');
+    }else if (event.keyCode === 83) {
+        console.log('move ball down');
+    }else if (event.keyCode === 65) {
+        console.log('move ball left');
+    }
+})
