@@ -1,9 +1,12 @@
 const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
-const cells = 3;
-const height = 600;
-const width = 600;
-const unitLength = width / cells;
+const cellsHorizontals = 7;
+const cellsVerical = 5;
+const height = window.innerHeight;
+const width = window.innerWidth;
+
+const unitLengthX = width / cellsHorizontals;
+const unitLengthY = height / cellsVerical;
 
 const engine = Engine.create();
 // engine.world.gravity.y = 0;
@@ -12,7 +15,7 @@ const render = Render.create({
     element: document.body,
     engine: engine,
     options: {
-        wireframes: true,
+        wireframes: false,
         width,
         height
     }
@@ -38,22 +41,22 @@ const walls = [
 ]
 World.add(world, walls);
 
-const grid = Array(cells)
+const grid = Array(cellsVerical)
     .fill(null)
-    .map(() => Array(cells).fill(false));
+    .map(() => Array(cellsHorizontals).fill(false));
 
-const verticals = Array(cells)
+const verticals = Array(cellsVerical)
     .fill(null)
-    .map(() => Array(cells - 1).fill(false));
+    .map(() => Array(cellsHorizontals - 1).fill(false));
 
-const horizontals = Array(cells - 1)
+const horizontals = Array(cellsVerical - 1)
     .fill(null)
-    .map(() => Array(cells).fill(false))
+    .map(() => Array(cellsHorizontals).fill(false))
 
 console.log(grid);
 
-const startRow = Math.floor(Math.random() * cells);
-const startsColumn = Math.floor(Math.random() * cells);
+const startRow = Math.floor(Math.random() * cellsVerical);
+const startsColumn = Math.floor(Math.random() * cellsHorizontals);
 
 const shuffle = (arr) => {
     let counter = arr.length;
@@ -91,7 +94,7 @@ const stepThroughCell = (row, column) => {
         const [nextRow, nextColumn, direction] = neighbor;
 
         // See if that neighbor is out bound
-        if (nextRow < 0 || nextRow >= cells || nextColumn < 0 || nextColumn >= cells) {
+        if (nextRow < 0 || nextRow >= cellsVerical || nextColumn < 0 || nextColumn >= cellsHorizontals) {
             continue;
         }
 
@@ -124,16 +127,18 @@ horizontals.forEach((row, rowIndex) => {
         }
 
         const wall = Bodies.rectangle(
-            columnIndex * unitLength + unitLength / 2,
-            rowIndex * unitLength + unitLength,
-            unitLength,
-            10,
+            columnIndex * unitLengthX + unitLengthX / 2,
+            rowIndex * unitLengthY + unitLengthY,
+            unitLengthX,
+            5,
             {
                 label:'wall',
-                isStatic: true
+                isStatic: true,
+                render : {
+                    fillStyle:'red',
+                }            
             }
         )
-
         World.add(world, wall);
     })
 })
@@ -146,14 +151,16 @@ verticals.forEach((row, rowIndex) => {
         }
 
         const wall = Bodies.rectangle(
-            columnIndex * unitLength + unitLength,
-            rowIndex * unitLength + unitLength / 2,
-            10,
-            unitLength,
+            columnIndex * unitLengthX + unitLengthX,
+            rowIndex * unitLengthY + unitLengthY / 2,
+            5,
+            unitLengthY,
             {
                 label:'wall',
-                isStatic: true
-            }
+                isStatic: true,
+                render : {
+                    fillStyle:'blue',
+                }            }
         )
         World.add(world, wall);
     })
@@ -161,25 +168,32 @@ verticals.forEach((row, rowIndex) => {
 
 //goal
 const goal = Bodies.rectangle(
-    width - unitLength / 2,
-    height - unitLength / 2,
-    unitLength * 0.7,
-    unitLength * 0.7,
+    width - unitLengthX / 2,
+    height - unitLengthY / 2,
+    unitLengthX * 0.7,
+    unitLengthY * 0.7,
     {
         label: 'goal',
-        isStatic: true
+        isStatic: true,
+        render : {
+            fillStyle:'green',
+        }
     }
 )
 World.add(world, goal);
 
 
 //ball
+const ballRadius = Math.min(unitLengthX,unitLengthY)/4;
 const ball = Bodies.circle(
-    unitLength / 2,
-    unitLength / 2,
-    unitLength / 4,
+    unitLengthX / 2,
+    unitLengthY / 2,
+    ballRadius,
     {
-        label: 'ball'
+        label: 'ball',
+        render : {
+            fillStyle:'yellow',
+        }
     }
 )
 
