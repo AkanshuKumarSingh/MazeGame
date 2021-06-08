@@ -1,0 +1,70 @@
+body{
+    /* background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%); */
+    background-image: linear-gradient(to top, #e14fad 0%, #f9d423 100%);
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.level{
+    width: 100%;
+    background: white;
+}
+
+.main-container{
+    /* display: flex;
+    align-items: center; */
+    height: 100vh;
+    width: 100vw;
+}
+
+.progress{
+    background-color: white;
+}
+
+.welcome{
+    height: 100vh;
+    width: 100vw;
+    font-size: 10rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.buttons{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+}
+
+.gravity{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+}
+
+.startBtn{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.winCard{
+    position: absolute;
+    background: white;
+    top: 30vh;
+    left: 30vw;
+    right: 30vw;
+}
+
+.inputBar{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+.RangeInput{
+    width: 70%;
+}
