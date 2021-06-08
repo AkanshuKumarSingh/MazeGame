@@ -1,29 +1,35 @@
 let level = localStorage.getItem("level");
 let gravity = localStorage.getItem("gravity");
+let winCard = document.querySelector(".winCard");
+let colorArr = ['#f368e0','#ee5253','#0abde3','#341f97','#01a3a4','#eb2f06','#b71540','#079992']
 
 const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
+
+if(isNaN(level)){
+    level = 5;
+}
 
 let cellsHorizontals = 4;
 let cellsVerical = 3;
 
-if(level == "easy"){
+if(level == "5"){
     cellsHorizontals = 5;
     cellsVerical = 4;
-}else if(level == "medium"){
+}else if(level == "7"){
     cellsHorizontals = 7;
     cellsVerical = 6;
-}else if(level == "hard"){
+}else if(level == "8"){
     cellsHorizontals = 8;
     cellsVerical = 7;
-}else if(level == "hard"){
+}else if(level == "9"){
     cellsHorizontals = 9;
     cellsVerical = 8;
-}else if(level == "expert"){
+}else if(level == "12"){
     cellsHorizontals = 12;
     cellsVerical = 10;
 }else if(!isNaN(parseFloat(level)) && isFinite(level)){
-    cellsHorizontals = level;
-    cellsVerical = level-2;
+    cellsHorizontals = Number(level);
+    cellsVerical = Number(level);
 }
 
 const height = window.innerHeight;
@@ -33,7 +39,7 @@ const unitLengthX = width / cellsHorizontals;
 const unitLengthY = height / cellsVerical;
 
 const engine = Engine.create();
-engine.world.gravity.y = Number(0);
+engine.world.gravity.y = Number(gravity);
 
 const { world } = engine;
 const render = Render.create({
@@ -160,7 +166,7 @@ horizontals.forEach((row, rowIndex) => {
                 label:'wall',
                 isStatic: true,
                 render : {
-                    fillStyle:'red',
+                    fillStyle:`${colorArr[Math.floor(8*Math.random())]}`,
                 }            
             }
         )
@@ -184,8 +190,9 @@ verticals.forEach((row, rowIndex) => {
                 label:'wall',
                 isStatic: true,
                 render : {
-                    fillStyle:'blue',
-                }            }
+                    fillStyle:`${colorArr[Math.floor(8*Math.random())]}`,           
+                }            
+            }
         )
         World.add(world, wall);
     })
@@ -201,7 +208,7 @@ const goal = Bodies.rectangle(
         label: 'goal',
         isStatic: true,
         render : {
-            fillStyle:'green',
+            fillStyle:'#5f27cd',
         }
     }
 )
@@ -217,7 +224,8 @@ const ball = Bodies.circle(
     {
         label: 'ball',
         render : {
-            fillStyle:'yellow',
+            fillStyle:'yellow', 
+            // background-image: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
         }
     }
 )
@@ -249,44 +257,16 @@ Events.on(engine, 'collisionStart', event => {
         const labels = ['ball', 'goal'];
         if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
             // document.querySelector('.winner').classList.remove('hidden');
-            world.gravity.y = 1;
+            world.gravity.y = -10;
+            
             world.bodies.forEach(body => {
                 if(body.label === 'wall'){
                     Body.setStatic(body,false);
                 }
             })
-            // Swal.fire({
-            //     title: 'YOU WON',
-            //     width: 600,
-            //     padding: '3em',
-            //     // background: 'rgba(0,0,123,0.4) url(/images/trees.png)',
-            //     background: '#2e86de url("https://thumbs.gfycat.com/BabyishKindJuliabutterfly-size_restricted.gif")',
-            //     backdrop: `
-            //        #5f27cd
-            //        url("")
-            //        left top
-            //        no-repeat
-            //     `
-            //   })
-                let elementCr = document.createElement("div");
-                elementCr.innerHTML = `<div class="card mb-3 winCard" style="max-width: 540px;">
-                <div class="row g-0">
-                  <div class="col-md-4">
-                    <img src="https://i.pinimg.com/originals/f6/62/92/f66292f2dc63060e9613741c91646381.gif" alt="" style="width=10px">
-                    <input type="range" class="form-range" min="0" max="5" id="customRange2">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>`;
-              document.body.appendChild(elementCr);
+            world.gravity.y = 10;
+            winCard.style.display = "flex";                
         }
     })
 })
-
 

@@ -57,6 +57,7 @@ body::-webkit-scrollbar {
     top: 30vh;
     left: 30vw;
     right: 30vw;
+    display: none;
 }
 
 .inputBar{
@@ -67,4 +68,24 @@ body::-webkit-scrollbar {
 
 .RangeInput{
     width: 70%;
+}
+
+.youwin{
+    text-align: center;
+    font-family: monospace;
+    font-size: xxx-large;
+}
+
+.youwincard{
+    background-image: linear-gradient(-45deg, #FFC796 0%, #FF6B95 100%);
+    
+}
+
+.ip{
+    font-family: cursive;
+}
+
+.nextBtn{
+    font-family: cursive;
+    font-style: italic;
 }
