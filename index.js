@@ -57,16 +57,16 @@ Runner.run(Runner.create(), engine);
 //wall
 
 const walls = [
-    Bodies.rectangle(width / 2, 0, width, 3, {
+    Bodies.rectangle(width / 2, 0, width, 5, {
         isStatic: true
     }),
-    Bodies.rectangle(width / 2, height, width, 3, {
+    Bodies.rectangle(width / 2, height, width, 5, {
         isStatic: true
     }),
-    Bodies.rectangle(0, height / 2, 3, height, {
+    Bodies.rectangle(0, height / 2, 5, height, {
         isStatic: true
     }),
-    Bodies.rectangle(width, height / 2, 3, height, {
+    Bodies.rectangle(width, height / 2, 5, height, {
         isStatic: true
     })
 ]
@@ -208,7 +208,7 @@ const goal = Bodies.rectangle(
         label: 'goal',
         isStatic: true,
         render : {
-            fillStyle:'#5f27cd',
+            fillStyle:`${colorArr[Math.floor(8*Math.random())]}`,
         }
     }
 )
@@ -236,16 +236,16 @@ document.addEventListener('keydown', event => {
     const { x, y } = ball.velocity;
     if (event.keyCode === 38) {
         // move up
-        Body.setVelocity(ball, { x, y: y - 5 });
+        Body.setVelocity(ball, { x, y: y - 2 });
     } else if (event.keyCode === 39) {
         // move right
-        Body.setVelocity(ball, { x: x + 5, y });
+        Body.setVelocity(ball, { x: x + 2, y });
     } else if (event.keyCode === 40) {
         // move down
-        Body.setVelocity(ball, { x, y: y + 5 });
+        Body.setVelocity(ball, { x, y: y + 2 });
     } else if (event.keyCode === 37) {
         // move left
-        Body.setVelocity(ball, { x: x - 5, y });
+        Body.setVelocity(ball, { x: x - 2, y });
     }
 })
 
@@ -257,14 +257,67 @@ Events.on(engine, 'collisionStart', event => {
         const labels = ['ball', 'goal'];
         if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
             // document.querySelector('.winner').classList.remove('hidden');
-            world.gravity.y = -10;
+            verticals.forEach((row, rowIndex) => {
+                row.forEach((open, columnIndex) => {
+                    if (open) {
+                        return;
+                    }
+                    
+                    const wall = Bodies.rectangle(
+                        columnIndex * unitLengthX + unitLengthX,
+                        rowIndex * unitLengthY + unitLengthY / 2,
+                        10,
+                        unitLengthY,
+                        {
+                            label:'wall',
+                            isStatic: true,
+                            render : {
+                                fillStyle:`${colorArr[Math.floor(8*Math.random())]}`,           
+                            }            
+                        }
+                    )
+                    World.add(world, wall);
+                })
+            })
+            horizontals.forEach((row, rowIndex) => {
+                row.forEach((open, columnIndex) => {
+                    if (open) {
+                        return;
+                    }
             
+                    const wall = Bodies.rectangle(
+                        columnIndex * unitLengthX + unitLengthX / 2,
+                        rowIndex * unitLengthY + unitLengthY,
+                        unitLengthX,
+                        5,
+                        {
+                            label:'wall',
+                            isStatic: true,
+                            render : {
+                                fillStyle:`${colorArr[Math.floor(8*Math.random())]}`,
+                            }            
+                        }
+                    )
+                    World.add(world, wall);
+                })
+            })
+
             world.bodies.forEach(body => {
                 if(body.label === 'wall'){
                     Body.setStatic(body,false);
+                    // Vec2 win = new Vec2(200,0);
+
                 }
             })
-            world.gravity.y = 10;
+            World.remove(world,goal);
+            setInterval(function () {
+                let r = Math.random();
+                let g = Math.floor(10*Math.random());
+                if(r > 0.5){
+                    g = g*-1;
+                }
+                world.gravity.y = g;
+            },100)
             winCard.style.display = "flex";                
         }
     })
