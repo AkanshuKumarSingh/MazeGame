@@ -24,11 +24,16 @@ body::-webkit-scrollbar {
 }
 
 .welcome{
+    font-family: cursive;
     height: 100vh;
     width: 100vw;
     font-size: 10rem;
     margin-top: 4rem;
     text-align: center;
+}
+
+.btn{
+    width: 7rem;
 }
 
 .buttons{
