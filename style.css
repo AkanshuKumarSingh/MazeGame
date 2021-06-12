@@ -32,6 +32,10 @@ body::-webkit-scrollbar {
     text-align: center;
 }
 
+.btn{
+    width: 7rem;
+}
+
 .buttons{
     width: 100%;
     display: flex;
